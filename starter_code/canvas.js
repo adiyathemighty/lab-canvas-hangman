@@ -79,100 +79,87 @@ HangmanCanvas.prototype.writeWrongLetter = function(letter, errorsLeft) {
   this.ctx.font = "50px monospace";
   this.ctx.fillText(
     letter,
-    this.incorrectLettersStartingPointX + 36 * (8 - errorsLeft),
+    this.incorrectLettersStartingPointX + 36 * (10 - errorsLeft),
     this.incorrectLettersStartingPointY
   );
   this.ctx.restore();
+  this.drawHangman(10-errorsLeft)
 };
 
 HangmanCanvas.prototype.drawHangman = function(guess) {
   switch (guess) {
     case 1:
       //draw bottom
-      this.ctx.beginPath();
-      this.ctx.moveTo(20, 540);
-      this.ctx.lineTo(180, 540);
-      this.ctx.lineTo(100, 490);
-      this.ctx.lineTo(20, 540);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart("base")(20, 540);
       break;
     case 2:
       //long line
-      this.ctx.beginPath();
-      this.ctx.moveTo(100, 490);
-      this.ctx.lineTo(100, 100);
-      this.ctx.closePath();
-      this.ctx.stroke();
-
+      printHangmanPart()(100, 490, 100, 100);
       break;
     case 3:
       //horizontal line
-      this.ctx.beginPath();
-      this.ctx.moveTo(100, 100);
-      this.ctx.lineTo(300, 100);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(100, 100, 300, 100);
       break;
     case 4:
       //little stick
-      this.ctx.beginPath();
-      this.ctx.moveTo(300, 100);
-      this.ctx.lineTo(300, 150);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(300, 100, 300, 150);
       break;
     case 5:
       //head
-      this.ctx.beginPath();
-      this.ctx.arc(300, 180, 30, Math.PI * 2, 0);
-      this.ctx.stroke();
+      printHangmanPart("head")(300, 180);
       break;
     case 6:
       //draw body
-      this.ctx.beginPath();
-      this.ctx.moveTo(300, 210);
-      this.ctx.lineTo(300, 300);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(300, 210, 300, 300);
       break;
     case 7:
       //left arm
-      this.ctx.beginPath();
-      this.ctx.moveTo(300, 230);
-      this.ctx.lineTo(250, 250);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(300, 230, 250, 250);
       break;
     case 8:
       //right arm
-      this.ctx.beginPath();
-      this.ctx.moveTo(300, 230);
-      this.ctx.lineTo(350, 250);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(300, 230, 350, 250);
       break;
     case 9:
       //left leg
-      this.ctx.beginPath();
-      this.ctx.moveTo(300, 300);
-      this.ctx.lineTo(250, 340);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(300, 300, 250, 340);
       break;
-    case 10:
+      case 10:
       //right leg
-      this.ctx.beginPath();
-      this.ctx.moveTo(300, 300);
-      this.ctx.lineTo(350, 340);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      printHangmanPart()(300, 300, 350, 340);
       break;
+  }
+  function printHangmanPart(part) {
+    if (part === "head") {
+      return function(x, y) {
+        hangmancanvas.ctx.beginPath();
+        hangmancanvas.ctx.arc(x, y, 30, Math.PI * 2, 0);
+        hangmancanvas.ctx.closePath();
+        hangmancanvas.ctx.stroke();
+      };
+    } else if (part === "base") {
+      return function(x, y) {
+        //x: 20 y: 540
+        hangmancanvas.ctx.beginPath();
+        hangmancanvas.ctx.moveTo(x, y);
+        hangmancanvas.ctx.lineTo(x + 160, y);
+        hangmancanvas.ctx.lineTo(x + 80, y - 50);
+        hangmancanvas.ctx.lineTo(x, y);
+        hangmancanvas.ctx.closePath();
+        hangmancanvas.ctx.stroke();
+      };
+    } else {
+      return function(x1, y1, x2, y2) {
+        hangmancanvas.ctx.beginPath();
+        hangmancanvas.ctx.moveTo(x1, y1);
+        hangmancanvas.ctx.lineTo(x2, y2);
+        hangmancanvas.ctx.closePath();
+        hangmancanvas.ctx.stroke();
+      };
+    }
   }
 };
 
 HangmanCanvas.prototype.gameOver = function() {};
 
 HangmanCanvas.prototype.winner = function() {};
-
-hangmancanvas.drawHangman();
